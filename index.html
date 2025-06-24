@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Invoice Bits Of Dev</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body style="font-family: sans-serif">
@@ -16,7 +18,7 @@
       </tr>
       <tr>
         <td bgcolor="#eeeeee" align="center" style="padding: 0px 20px">
-          <table border="0" bgcolor="#ffffff" cellpadding="0" cellspacing="'0" style="
+          <table id="content" border="0" bgcolor="#ffffff" cellpadding="0" cellspacing="'0" style="
                 max-width: 800px;
                 padding: 50px 50px;
                 width: 100%;
@@ -64,13 +66,19 @@
                         <p style="line-height: 25px; padding: 0; margin: 0;">
                           Mohammadpur, Dhaka<br />
                           1207, Bangladesh <br />
-
+                          +880 1792892198 <br />
+                          devhelaluddin@gmail.com <br />
+                          www.bitsofdev.com
                         </p>
                       </td>
                       <td style=" padding-left: 25px;">
-                        <p style="line-height: 25px; padding: 0; margin: 0;"> +880 1792892198 <br />
-                          devhelaluddin@gmail.com <br />
-                          www.bitsofdev.com</p>
+                        <p style="line-height: 25px; padding: 0; margin: 0;">
+                          Bank name: City bank<br />
+                          Holder Name: Helal Uddin<br />
+                          Account Number : 2183805444001<br />
+                          Branch Name: Principle Branch<br />
+                          SWIFT Code: ciblbddh<br />
+                        </p>
                       </td>
                     </tr>
                   </tbody>
@@ -193,10 +201,30 @@
       </tr>
       <tr>
         <td bgcolor="#eeeeee" align="center" style="padding: 20px 0px">
+          <button onclick="generatePDF()">Download as PDF</button>
         </td>
       </tr>
     </tbody>
   </table>
+  <script>
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const content = document.getElementById("content");
+
+      html2canvas(content, { scale: 1.5 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/jpeg", 0.8); // JPEG + compression
+
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("download.pdf");
+      });
+    }
+
+  </script>
+
 </body>
 
 </html>
